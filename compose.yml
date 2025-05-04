@@ -1,0 +1,22 @@
+services:
+  client:
+    container_name: client_barbershop
+    env_file:
+      - ./.env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - main
+    restart: unless-stopped
+
+networks:
+  main:
+    driver: bridge
+    external: true
