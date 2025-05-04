@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { addService, getServices, deleteService } from '../utils/api';
-import Input from './Input';
-import Button from './Button';
-import Loader from './Loader';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { addService, getServices } from "../utils/api";
+import Input from "./Input";
+import Button from "./Button";
+import Loader from "./Loader";
 
 const FormContainer = styled.div`
   padding: 20px;
@@ -50,18 +50,18 @@ const DeleteButton = styled.button`
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
-  
+
   &:hover {
     opacity: 0.9;
   }
 `;
 
 const AddServiceForm = ({ onSuccess, onDeleteService }) => {
-  const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
-  const [duration, setDuration] = useState('');
+  const [name, setName] = useState("");
+  const [price, setPrice] = useState("");
+  const [duration, setDuration] = useState("");
   const [services, setServices] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingServices, setLoadingServices] = useState(false);
 
@@ -82,35 +82,35 @@ const AddServiceForm = ({ onSuccess, onDeleteService }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!name || !price || !duration) {
-      setError('Por favor completa todos los campos');
+      setError("Por favor completa todos los campos");
       return;
     }
-    
+
     try {
       setLoading(true);
-      setError('');
-      
+      setError("");
+
       await addService({
         name,
         price: parseFloat(price),
-        duration
+        duration,
       });
-      
+
       // Refresh services list
       const updatedServices = await getServices();
       setServices(updatedServices);
-      
+
       // Clear form
-      setName('');
-      setPrice('');
-      setDuration('');
-      
+      setName("");
+      setPrice("");
+      setDuration("");
+
       onSuccess();
     } catch (err) {
       console.error(err);
-      setError('Ocurrió un error al agregar el servicio');
+      setError("Ocurrió un error al agregar el servicio");
     } finally {
       setLoading(false);
     }
@@ -119,7 +119,7 @@ const AddServiceForm = ({ onSuccess, onDeleteService }) => {
   return (
     <FormContainer>
       <h2>Agregar nuevo servicio</h2>
-      
+
       <Form onSubmit={handleSubmit}>
         <Input
           label="Nombre del servicio"
@@ -128,7 +128,7 @@ const AddServiceForm = ({ onSuccess, onDeleteService }) => {
           placeholder="Ej: Corte de cabello"
           required
         />
-        
+
         <Input
           type="number"
           label="Precio ($)"
@@ -137,7 +137,7 @@ const AddServiceForm = ({ onSuccess, onDeleteService }) => {
           placeholder="Ej: 50.00"
           required
         />
-        
+
         <Input
           label="Duración"
           value={duration}
@@ -145,15 +145,12 @@ const AddServiceForm = ({ onSuccess, onDeleteService }) => {
           placeholder="Ej: 1 h 30 m"
           required
         />
-        
+
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        
+
         <ButtonContainer>
-          <Button 
-            type="submit"
-            disabled={loading}
-          >
-            {loading ? <Loader text={null} /> : 'Agregar servicio'}
+          <Button type="submit" disabled={loading}>
+            {loading ? <Loader text={null} /> : "Agregar servicio"}
           </Button>
         </ButtonContainer>
       </Form>
@@ -165,14 +162,13 @@ const AddServiceForm = ({ onSuccess, onDeleteService }) => {
         ) : services.length === 0 ? (
           <p>No hay servicios registrados</p>
         ) : (
-          services.map(service => (
+          services.map((service) => (
             <ServiceItem key={service._id}>
               <ServiceInfo>
-                <strong>{service.name}</strong> - ${service.price} ({service.duration})
+                <strong>{service.name}</strong> - ${service.price} (
+                {service.duration})
               </ServiceInfo>
-              <DeleteButton 
-                onClick={() => onDeleteService(service._id)}
-              >
+              <DeleteButton onClick={() => onDeleteService(service._id)}>
                 Eliminar
               </DeleteButton>
             </ServiceItem>

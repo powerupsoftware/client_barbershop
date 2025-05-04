@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import { FaCalendarAlt, FaClock, FaDollarSign, FaUserAlt, FaCheck } from 'react-icons/fa';
-import { useAppContext } from '../context/AppContext';
-import Header from '../components/Header';
-import Button from '../components/Button';
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { FaCalendarAlt, FaClock, FaUserAlt, FaCheck } from "react-icons/fa";
+import { useAppContext } from "../context/AppContext";
+import Header from "../components/Header";
+import Button from "../components/Button";
 
 const Container = styled.div`
   max-width: 600px;
@@ -25,7 +25,7 @@ const SuccessIcon = styled.div`
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
-  
+
   svg {
     background-color: #27ae60;
     color: white;
@@ -52,7 +52,7 @@ const InfoTitle = styled.h3`
   margin-bottom: 10px;
   display: flex;
   align-items: center;
-  
+
   svg {
     margin-right: 10px;
   }
@@ -76,7 +76,7 @@ const ServiceItem = styled.li`
   justify-content: space-between;
   padding: 10px 0;
   border-bottom: 1px solid #eee;
-  
+
   &:last-child {
     border-bottom: none;
   }
@@ -98,50 +98,65 @@ const ButtonContainer = styled.div`
 `;
 
 const Confirmation = () => {
-  const { 
-    client, 
-    selectedServices, 
-    selectedDate, 
-    selectedTime, 
+  const {
+    client,
+    selectedServices,
+    selectedDate,
+    selectedTime,
     totalPrice,
     totalDuration,
-    resetBooking
+    resetBooking,
   } = useAppContext();
-  
+
   const navigate = useNavigate();
-  
+
   // Redirect if no appointment data
   useEffect(() => {
-    if (!client || !selectedDate || !selectedTime || selectedServices.length === 0) {
-      navigate('/');
+    if (
+      !client ||
+      !selectedDate ||
+      !selectedTime ||
+      selectedServices.length === 0
+    ) {
+      navigate("/");
     }
   }, [client, selectedDate, selectedTime, selectedServices, navigate]);
-  
+
   const handleNewAppointment = () => {
     resetBooking();
-    navigate('/');
+    navigate("/");
   };
-  
+
   const formatDate = (date) => {
-    if (!date) return '';
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    return date.toLocaleDateString('es-ES', options);
+    if (!date) return "";
+    const options = {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    };
+    return date.toLocaleDateString("es-ES", options);
   };
-  
-  if (!client || !selectedDate || !selectedTime || selectedServices.length === 0) {
+
+  if (
+    !client ||
+    !selectedDate ||
+    !selectedTime ||
+    selectedServices.length === 0
+  ) {
     return null;
   }
 
   return (
     <Container>
       <Header subtitle="Confirmación de cita" />
-      
+
       <ConfirmationCard>
         <SuccessIcon>
           <FaCheck />
         </SuccessIcon>
         <Title>¡Cita agendada con éxito!</Title>
-        
+
         <InfoSection>
           <InfoTitle>
             <FaUserAlt /> Cliente
@@ -150,7 +165,7 @@ const Confirmation = () => {
             {client.name} ({client.phone})
           </InfoContent>
         </InfoSection>
-        
+
         <InfoSection>
           <InfoTitle>
             <FaCalendarAlt /> Fecha y hora
@@ -159,14 +174,14 @@ const Confirmation = () => {
             {formatDate(selectedDate)} a las {selectedTime}
           </InfoContent>
         </InfoSection>
-        
+
         <InfoSection>
           <InfoTitle>
             <FaClock /> Servicios
           </InfoTitle>
           <InfoContent>
             <ServicesList>
-              {selectedServices.map(service => (
+              {selectedServices.map((service) => (
                 <ServiceItem key={service._id}>
                   <span>{service.name}</span>
                   <span>${service.price}</span>
@@ -180,12 +195,9 @@ const Confirmation = () => {
           </InfoContent>
         </InfoSection>
       </ConfirmationCard>
-      
+
       <ButtonContainer>
-        <Button 
-          onClick={handleNewAppointment}
-          secondary
-        >
+        <Button onClick={handleNewAppointment} secondary>
           Agendar nueva cita
         </Button>
       </ButtonContainer>
